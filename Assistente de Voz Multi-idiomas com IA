@@ -1,0 +1,35 @@
+# Assistente de Voz Multi-idiomas com IA 🎙️🤖
+
+Um assistente virtual de voz desenvolvido em Python que escuta, entende e responde — tudo por voz. A aplicação captura o áudio direto do navegador, transcreve a fala, processa a resposta com um LLM e devolve tudo em áudio, criando uma conversa natural de ponta a ponta.
+
+## 🏗️ Como o pipeline funciona
+
+O fluxo foi dividido em 4 etapas, rodando no Google Colab:
+
+1. **Captura de Áudio** — JavaScript integrado ao Python usa a Web Media Devices API para gravar a voz do usuário direto do navegador, sem precisar de nenhuma instalação local.
+
+2. **Speech-to-Text (ASR)** — O áudio gravado é transcrito com o **OpenAI Whisper** (`small`), que oferece boa precisão mesmo em ambientes com ruído.
+
+3. **Processamento com LLM** — O texto transcrito é enviado para a **API do ChatGPT** (`gpt-3.5-turbo`), que interpreta a intenção e gera uma resposta contextualizada.
+
+4. **Text-to-Speech (TTS)** — A resposta é convertida de volta em áudio usando o **Google Text-to-Speech (gTTS)**, fechando o ciclo da conversa.
+
+## 🛠️ Stack utilizada
+
+- **Linguagens:** Python + JavaScript (captura de mídia no navegador)
+- **Modelos de IA:** OpenAI Whisper, GPT-3.5-Turbo
+- **Bibliotecas:** `openai`, `openai-whisper`, `gTTS`, `IPython.display`, `base64`
+- **Ambiente:** Google Colab
+
+## 💡 Pontos técnicos que valem destaque
+
+- **Decodificação Base64:** O áudio vindo do frontend chega como payload Base64 e é decodificado no backend Python para um arquivo `.wav` antes de ser processado pelo Whisper.
+
+- **Resiliência com Mock:** O pipeline foi pensado para não quebrar quando a API da OpenAI retorna erro `429 (RateLimitError)`. Nesses casos, um sistema de *fallback* assume o lugar do ChatGPT, garantindo que o gTTS continue funcionando e a conversa não seja interrompida abruptamente.
+
+## 🚀 Como rodar
+
+1. Clone este repositório.
+2. Faça o upload do `.ipynb` no [Google Colab](https://colab.research.google.com/drive/1_CLPX-UKq5in_7My9EveaL-xupdPp2zL?usp=sharing).
+3. Insira sua **OpenAI API Key** na célula da Etapa 3.
+4. Execute as células em ordem e permita o acesso ao microfone quando o navegador solicitar.
